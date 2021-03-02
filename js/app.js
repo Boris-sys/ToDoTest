@@ -10,8 +10,47 @@ const UNCHECK = "fa-circle-thin";
 const LINE_THROUGH = "lineThrough";
 
 //Variables
-let LIST = []
-    , id = 0;
+//let LIST = []
+//    , id = 0;
+let LIST, id;
+
+//Traer item de almacenamiento local
+let data = localStorage.getItem("TODO");
+
+//Comprobar que data no esten vacio
+if(data)
+{
+    LIST = JSON.parse(data);
+    id = LIST.length; //setear el id al ultimo elemento de la lista
+    loadList(LIST); //Cargar la lista a la interfaz del usuario
+}
+else
+{
+    //Si data no esta vacio
+    LIST = [];
+    id = 0;
+}
+
+//Cargar los items en la interfaz del usuario
+function loadList(array)
+{
+    array.forEach(function(item)
+        {
+            addToDo(item.name, item.id, item.done, item.trash);
+        }
+    );
+}
+
+//limpiar el almacenamiento local
+clear.addEventListener("click", function()
+    {
+        localStorage.clear();
+        location.reload();
+    }
+);
+
+//Guardar item en almacenamiento local (codigo que debera ser añadido cada vez que el array LIST es actualizado)
+//localStorage.setItem("TODO", JSON.stringify(LIST));
 
 //Fecha actual
 const options = {weekday : "long", month : "short", day : "numeric"};
@@ -40,7 +79,7 @@ function addToDo(toDo, id, done, trash){
 //Prueba con ToDo forzado
 //addToDo("Play Spotify");
 
-//Añadir item a la listaa cuando el usuario presiona ENTER
+//Añadir item a la lista cuando el usuario presiona ENTER
 document.addEventListener("keyup",function(even)
     {
         if(event.keyCode == 13)
@@ -57,6 +96,10 @@ document.addEventListener("keyup",function(even)
                     done : false, 
                     trash : false
                 });
+
+                //Guardar item en almacenamiento local (codigo que debera ser añadido cada vez que el array LIST es actualizado)
+                localStorage.setItem("TODO", JSON.stringify(LIST));
+
                 id++;
             }
             input.value = "";
@@ -74,7 +117,7 @@ function completeToDo(element)
     element.classList.toggle(UNCHECK);
     element.parentNode.querySelector(".text").classList.toggle(LINE_THROUGH);
 
-    LIST[element.id].odne = LIST[element.id].done ? false : true;
+    LIST[element.id].done = LIST[element.id].done ? false : true;
 }
 
 //Remover ToDo
@@ -101,6 +144,10 @@ list.addEventListener("click", function(event)
         {
             removeToDo(element);
         }
+
+        //Guardar item en almacenamiento local (codigo que debera ser añadido cada vez que el array LIST es actualizado)
+        localStorage.setItem("TODO", JSON.stringify(LIST));
+
     }
 
 );
