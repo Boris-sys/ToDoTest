@@ -1,3 +1,17 @@
+window.addEventListener('load', () => {
+    registerSW();
+  });
+  
+  async function registerSW() {
+    if ('serviceWorker' in navigator) {
+      try {
+        await navigator.serviceWorker.register('./sw.js');
+      } catch (e) {
+        console.log(`SW registration failed`);
+      }
+    }
+  }
+
 //Seleccion de elementos
 const clear = document.querySelector(".clear");
 const dateElement = document.getElementById("date");
@@ -48,6 +62,8 @@ clear.addEventListener("click", function()
         location.reload();
     }
 );
+
+
 
 //Guardar item en almacenamiento local (codigo que debera ser añadido cada vez que el array LIST es actualizado)
 //localStorage.setItem("TODO", JSON.stringify(LIST));
